@@ -69,7 +69,6 @@ size_t entry_size(const fs::path& p) {
     fs::recursive_directory_iterator e;
     for (fs::recursive_directory_iterator i = fs::recursive_directory_iterator(p); i != e; i++) {
         const fs::path pp = (*i);
-
         if (!fs::is_directory(pp)) {
             total_size += fs::file_size(pp);
         }
@@ -98,12 +97,10 @@ options parse_options(int argc, char* argv[]) {
         switch (next_opt) {
             case 1:
                 o.dir = fs::path(arg);
-                next_opt = 0;
                 break;
 
             case 2:
                 o.max_dist = static_cast<size_t>( atoi(arg) );
-                next_opt = 0;
                 break;
 
             case 3:
@@ -130,8 +127,9 @@ options parse_options(int argc, char* argv[]) {
                 if (it != allowed_opts.cend()) {
                     next_opt = static_cast<size_t>(std::distance(allowed_opts.begin(), it)) + 1;
                 }
-                break;
+                continue;
         }
+        next_opt = 0;
     }
     return o;
 
